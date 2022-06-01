@@ -1,0 +1,81 @@
+{% extends "Base.html" %}
+
+{% block content %}
+
+
+<body>
+
+
+<div class="container">
+
+  
+</div>
+
+
+<div class="container">
+  <p>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Fruit -Quality Checker
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body" align='left'>
+      A simple Deep neural network model trained on real world images . <br>
+      By tapping below you can upload any image under checked condition below.<br><br>
+      Output by clicking on "Submit and Predict" button:
+      <ul>
+        <li><strong>Visualization of probabilities for each fruit class made by Classifier/Model.</strong> </li>
+        <li><strong>Also, predicts the probability of Fruit been Fresh or Rotten</strong></li>
+      </ul>
+    </div>
+  </div>
+    <hr>
+  <form action="{{url_for("pred")}}"  method="POST" enctype="multipart/form-data">
+    <h4>Click below to upload your <strong>image</strong>.</h4>
+
+    <div class="form-group">
+    <label>
+      <a href="#!" class="btn btn-primary" id="start-camera">Start Camera</a>
+      <video id="video" width="320" height="240" autoplay></video>
+      <a href="#!" class="btn btn-warning" id="click-photo">Click Photo</a>
+      <canvas id="canvas" width="320" height="240"></canvas>
+      <input type="hidden"   name="file" id="file">
+    </label>
+  </div>
+
+    <div class="container">
+      <div class="form-group form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+      <label class="form-check-label" for="exampleCheck1">Make sure you uploaded images related to fruits</label>
+    </div>
+
+    </div>
+  <br>
+    <input type="submit" class="btn btn-secondary" name="Submit and predict" value="Submit and Predict">
+  </form>
+  <br>
+
+</div>
+<script>
+  let camera_button = document.querySelector("#start-camera");
+let video = document.querySelector("#video");
+let click_button = document.querySelector("#click-photo");
+let file = document.querySelector("#file");
+
+let canvas = document.querySelector("#canvas");
+
+camera_button.addEventListener('click', async function() {
+   	let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+	video.srcObject = stream;
+});
+
+click_button.addEventListener('click', function() {
+   	canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    let image_data_url = canvas.toDataURL('image/jpeg');
+    file.value = image_data_url.split(',')[1];
+});
+</script>
+
+
+</body>
+{% endblock %}
